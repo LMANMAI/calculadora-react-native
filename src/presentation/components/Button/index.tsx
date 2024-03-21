@@ -6,6 +6,7 @@ interface IButtonnProps {
   color?: string;
   doubleSize?: boolean;
   text?: boolean;
+  onPress: () => void;
 }
 
 const Button: React.FC<IButtonnProps> = ({
@@ -13,9 +14,11 @@ const Button: React.FC<IButtonnProps> = ({
   color = colors.darkGray,
   doubleSize = false,
   text = false,
+  onPress,
 }) => {
   return (
     <Pressable
+      onPress={() => onPress()}
       style={({pressed}) => ({
         ...styles.button,
         opacity: pressed ? 0.8 : 1,
