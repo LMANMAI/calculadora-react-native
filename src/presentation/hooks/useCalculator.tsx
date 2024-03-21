@@ -105,11 +105,11 @@ export const useCalculator = () => {
         break;
       }
       case Operator.subtrac: {
-        setNumber(`${number1 - number2}`);
+        setNumber(`${number2 - number1}`);
         break;
       }
       case Operator.divide: {
-        setNumber(`${number1 / number2}`);
+        setNumber(`${number2 / number1}`);
         break;
       }
       case Operator.multiply: {
