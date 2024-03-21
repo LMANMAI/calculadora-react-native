@@ -6,6 +6,7 @@ const CalculatorScreen = () => {
   const {
     number,
     prevnumber,
+    formula,
     buildNumber,
     clean,
     deleteOperation,
@@ -21,11 +22,15 @@ const CalculatorScreen = () => {
     <View style={styles.calculatorContainer}>
       <View style={{paddingHorizontal: 30, paddingBottom: 20}}>
         <Text adjustsFontSizeToFit numberOfLines={1} style={styles.mainResult}>
-          {number}
+          {formula}
         </Text>
-        <Text adjustsFontSizeToFit numberOfLines={1} style={styles.subResult}>
-          {prevnumber === '0' ? '' : prevnumber}
-        </Text>
+        {formula === prevnumber ? (
+          <Text style={styles.subResult}> </Text>
+        ) : (
+          <Text adjustsFontSizeToFit numberOfLines={1} style={styles.subResult}>
+            {prevnumber}
+          </Text>
+        )}
 
         <View style={styles.row}>
           <Button
