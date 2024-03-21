@@ -1,20 +1,23 @@
-import {useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 enum Operator {
-  add,
-  subtrac,
-  multiply,
-  divide,
+  add = '+',
+  subtrac = '-',
+  multiply = 'x',
+  divide = '/',
 }
 
 export const useCalculator = () => {
   const [number, setNumber] = useState<string>('0');
   const [prevnumber, setPrevNumber] = useState<string>('0');
+  const [formula, setFormula] = useState<string>('');
 
   const lastOperation = useRef<Operator>();
 
   const clean = () => {
     setNumber('0');
     setPrevNumber('0');
+    setFormula('0');
+    lastOperation.current = undefined;
   };
 
   const deleteOperation = () => {
@@ -66,6 +69,7 @@ export const useCalculator = () => {
   };
 
   const setLastNumber = () => {
+    calculateResult();
     if (number.endsWith('.')) {
       setPrevNumber(number.slice(0, -1));
     } else {
@@ -96,36 +100,56 @@ export const useCalculator = () => {
   };
 
   const calculateResult = () => {
-    const number1 = Number(number);
-    const number2 = Number(prevnumber);
+    const result = calculateSubResult();
+    setFormula(result.toString());
+    lastOperation.current = undefined;
+    setPrevNumber('0');
+  };
 
-    switch (lastOperation.current) {
+  const calculateSubResult = (): number => {
+    const [firstValue, operation, secondValue] = formula.split(' ');
+
+    const number1 = Number(firstValue);
+    const number2 = Number(secondValue);
+
+    if (isNaN(number2)) return number1;
+    switch (operation) {
       case Operator.add: {
-        setNumber(`${number1 + number2}`);
-        break;
+        return number1 + number2;
       }
       case Operator.subtrac: {
-        setNumber(`${number2 - number1}`);
-        break;
+        return number1 - number2;
       }
       case Operator.divide: {
-        setNumber(`${number2 / number1}`);
-        break;
+        return number1 / number2;
       }
       case Operator.multiply: {
-        setNumber(`${number1 * number2}`);
-        break;
+        return number1 * number2;
       }
 
       default:
         throw new Error('Operation not implemented');
     }
-    setPrevNumber('0');
   };
+  useEffect(() => {
+    if (lastOperation.current) {
+      const firstFormulaPart = formula.split(' ').at(0);
+      setFormula(`${firstFormulaPart} ${lastOperation.current} ${number}`);
+    } else {
+      setFormula(number);
+    }
+  }, [number]);
+
+  useEffect(() => {
+    const subresult = calculateSubResult();
+    setPrevNumber(subresult.toString());
+  }, [formula]);
+
   return {
     //properties
     number,
     prevnumber,
+    formula,
     //methods
     buildNumber,
     clean,
