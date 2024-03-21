@@ -1,41 +1,87 @@
 import {View, Text} from 'react-native';
 import {colors, styles} from '../../../config/theme/app-theme';
 import {Button} from '../../components';
+import {useCalculator} from '../../hooks/useCalculator';
 const CalculatorScreen = () => {
+  const {
+    number,
+    prevnumber,
+    buildNumber,
+    clean,
+    deleteOperation,
+    toggleSign,
+    divideOperations,
+    multiplyOperations,
+    addOperations,
+    subtracOperations,
+    calculateResult,
+  } = useCalculator();
+
   return (
     <View style={styles.calculatorContainer}>
       <View style={{paddingHorizontal: 30, paddingBottom: 20}}>
-        <Text style={styles.mainResult}>1000</Text>
-        <Text style={styles.subResult}>13</Text>
+        <Text adjustsFontSizeToFit numberOfLines={1} style={styles.mainResult}>
+          {number}
+        </Text>
+        <Text adjustsFontSizeToFit numberOfLines={1} style={styles.subResult}>
+          {prevnumber === '0' ? '' : prevnumber}
+        </Text>
 
         <View style={styles.row}>
-          <Button label={'C'} color={colors.lightGray} text />
-          <Button label={'+/-'} color={colors.lightGray} text />
-          <Button label={'del'} color={colors.lightGray} text />
-          <Button label={'/'} color={colors.orange} />
+          <Button
+            onPress={() => clean()}
+            label={'C'}
+            color={colors.lightGray}
+            text
+          />
+          <Button
+            onPress={toggleSign}
+            label={'+/-'}
+            color={colors.lightGray}
+            text
+          />
+          <Button
+            onPress={deleteOperation}
+            label={'del'}
+            color={colors.lightGray}
+            text
+          />
+          <Button
+            onPress={divideOperations}
+            label={'/'}
+            color={colors.orange}
+          />
         </View>
         <View style={styles.row}>
-          <Button label={'7'} />
-          <Button label={'8'} />
-          <Button label={'9'} />
-          <Button label={'x'} color={colors.orange} />
+          <Button onPress={() => buildNumber('7')} label={'7'} />
+          <Button onPress={() => buildNumber('8')} label={'8'} />
+          <Button onPress={() => buildNumber('9')} label={'9'} />
+          <Button
+            onPress={multiplyOperations}
+            label={'x'}
+            color={colors.orange}
+          />
         </View>
         <View style={styles.row}>
-          <Button label={'4'} />
-          <Button label={'5'} />
-          <Button label={'6'} />
-          <Button label={'-'} color={colors.orange} />
+          <Button onPress={() => buildNumber('4')} label={'4'} />
+          <Button onPress={() => buildNumber('5')} label={'5'} />
+          <Button onPress={() => buildNumber('6')} label={'6'} />
+          <Button
+            onPress={subtracOperations}
+            label={'-'}
+            color={colors.orange}
+          />
         </View>
         <View style={styles.row}>
-          <Button label={'1'} />
-          <Button label={'2'} />
-          <Button label={'3'} />
-          <Button label={'+'} color={colors.orange} />
+          <Button onPress={() => buildNumber('1')} label={'1'} />
+          <Button onPress={() => buildNumber('2')} label={'2'} />
+          <Button onPress={() => buildNumber('3')} label={'3'} />
+          <Button onPress={addOperations} label={'+'} color={colors.orange} />
         </View>
         <View style={styles.row}>
-          <Button label={'0'} doubleSize />
-          <Button label={'.'} />
-          <Button label={'='} color={colors.orange} />
+          <Button onPress={() => buildNumber('0')} label={'0'} doubleSize />
+          <Button onPress={() => buildNumber('.')} label={'.'} />
+          <Button onPress={calculateResult} label={'='} color={colors.orange} />
         </View>
       </View>
     </View>
